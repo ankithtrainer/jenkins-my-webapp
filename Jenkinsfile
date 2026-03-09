@@ -11,7 +11,7 @@ pipeline {
 
         stage('Checkout') {
             steps {
-             git branch: 'main',url: 'https://github.com/ankithtrainer/jenkins-my-webapp'
+                git branch: 'main', url: 'https://github.com/ankithtrainer/jenkins-my-webapp'
             }
         }
 
@@ -19,8 +19,6 @@ pipeline {
             steps {
                 bat 'mvn clean compile'
             }
-         
-         
         }
 
         stage('Run JUnit Tests') {
@@ -29,14 +27,15 @@ pipeline {
             }
         }
 
-       stage('SonarQube Analysis') {
-          steps {
-          withSonarQubeEnv('SonarServer') {
-            bat 'mvn clean verify sonar:sonar'
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('SonarServer') {
+                    bat 'mvn clean verify sonar:sonar'
+                }
+            }
         }
-        
-        
-         stage('Build with Maven') {
+
+        stage('Build with Maven') {
             steps {
                 bat 'mvn clean package'
             }
@@ -44,18 +43,15 @@ pipeline {
 
         stage('Deploy to Tomcat') {
             steps {
-			
-                bat 'copy target\\*.war C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\'
+                bat 'copy target\\*.war "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\"'
             }
         }
 
         stage('Start Tomcat Server') {
             steps {
-                bat 'C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\bin\\startup.bat'
+                bat '"C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\bin\\startup.bat"'
             }
         }
-    }
-}
 
     }
 }
